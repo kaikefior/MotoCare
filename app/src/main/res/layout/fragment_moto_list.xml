@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMotos"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:padding="16dp" android:paddingBottom="96dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_moto" />
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="center" android:gravity="center"
+        android:padding="32dp" android:text="@string/empty_motos"
+        android:textSize="18sp" android:visibility="gone" />
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/loading" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNovaMoto"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end" android:layout_margin="24dp"
+        android:contentDescription="@string/new_moto"
+        app:srcCompat="@android:drawable/ic_input_add" />
+</FrameLayout>

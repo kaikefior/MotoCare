@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolbar"
+        android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+        app:title="@string/new_maintenance" app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="?attr/colorOnSurface"
+        app:navigationContentDescription="@string/navigate_back" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="24dp">
+            <TextView android:id="@+id/tvMoto"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceTitleLarge" />
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilServico"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/maintenance_service">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etServico"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="textCapSentences" android:importantForAutofill="no"
+                    android:maxLength="120" android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilData"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/maintenance_date">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etData"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="date" android:importantForAutofill="no"
+                    android:focusable="false" android:clickable="true" android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilKm"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/maintenance_km">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etKm"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="number" android:importantForAutofill="no"
+                    android:maxLength="9" android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilCusto"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/maintenance_cost">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etCusto"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" android:importantForAutofill="no"
+                    android:maxLength="12" android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilObservacao"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/maintenance_notes">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etObservacao"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine" android:importantForAutofill="no"
+                    android:maxLength="500" android:minLines="2" android:maxLines="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:text="@string/schedule_form_title"
+                android:textAppearance="?attr/textAppearanceTitleLarge" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" android:text="@string/schedule_form_hint" />
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilProximaData"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/schedule_next_date"
+                app:endIconMode="custom" app:endIconDrawable="@android:drawable/ic_menu_close_clear_cancel"
+                app:endIconContentDescription="@string/schedule_clear_date">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etProximaData"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="date" android:focusable="false" android:clickable="true"
+                    android:maxLines="1" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilProximaKm"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:hint="@string/schedule_next_km">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etProximaKm"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:inputType="number" android:maxLength="9" android:maxLines="1"
+                    android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/cbPrevisaoConcluida"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" android:text="@string/schedule_completed_checkbox"
+                android:visibility="gone" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnSalvar"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:text="@string/save_maintenance" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnExcluir"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/btn_excluir" android:textColor="?attr/colorError"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

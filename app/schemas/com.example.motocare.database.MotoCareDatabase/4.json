@@ -1,0 +1,251 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "348619a4da94dd75fd09e6e74186afa8",
+    "entities": [
+      {
+        "tableName": "motos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuarioId` INTEGER NOT NULL, `marca` TEXT NOT NULL, `modelo` TEXT NOT NULL, `ano` INTEGER NOT NULL, `quilometragemAtual` INTEGER NOT NULL, `placa` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "usuarioId",
+            "columnName": "usuarioId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marca",
+            "columnName": "marca",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modelo",
+            "columnName": "modelo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ano",
+            "columnName": "ano",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quilometragemAtual",
+            "columnName": "quilometragemAtual",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "placa",
+            "columnName": "placa",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_motos_usuarioId",
+            "unique": false,
+            "columnNames": [
+              "usuarioId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_motos_usuarioId` ON `${TABLE_NAME}` (`usuarioId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "abastecimentos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `motoId` INTEGER NOT NULL, `data` TEXT NOT NULL, `quilometragem` INTEGER NOT NULL, `litros` REAL NOT NULL, `valorPorLitro` REAL NOT NULL, `valorTotal` REAL NOT NULL, FOREIGN KEY(`motoId`) REFERENCES `motos`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "motoId",
+            "columnName": "motoId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quilometragem",
+            "columnName": "quilometragem",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "litros",
+            "columnName": "litros",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valorPorLitro",
+            "columnName": "valorPorLitro",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valorTotal",
+            "columnName": "valorTotal",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_abastecimentos_motoId",
+            "unique": false,
+            "columnNames": [
+              "motoId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_abastecimentos_motoId` ON `${TABLE_NAME}` (`motoId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "motos",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "motoId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "manutencoes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `motoId` INTEGER NOT NULL, `data` TEXT NOT NULL, `quilometragem` INTEGER NOT NULL, `servico` TEXT NOT NULL, `custo` REAL NOT NULL, `observacao` TEXT NOT NULL, `proximaData` TEXT, `proximaQuilometragem` INTEGER, `previsaoConcluida` INTEGER NOT NULL DEFAULT 0, FOREIGN KEY(`motoId`) REFERENCES `motos`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "motoId",
+            "columnName": "motoId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quilometragem",
+            "columnName": "quilometragem",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "servico",
+            "columnName": "servico",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "custo",
+            "columnName": "custo",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observacao",
+            "columnName": "observacao",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proximaData",
+            "columnName": "proximaData",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "proximaQuilometragem",
+            "columnName": "proximaQuilometragem",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "previsaoConcluida",
+            "columnName": "previsaoConcluida",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_manutencoes_motoId",
+            "unique": false,
+            "columnNames": [
+              "motoId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_manutencoes_motoId` ON `${TABLE_NAME}` (`motoId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "motos",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "motoId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '348619a4da94dd75fd09e6e74186afa8')"
+    ]
+  }
+}
