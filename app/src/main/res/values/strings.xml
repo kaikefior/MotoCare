@@ -117,4 +117,6 @@
     <string name="schedule_near">Próxima do vencimento</string>
     <string name="schedule_on_time">Em dia</string>
     <string name="schedule_finished">Previsão concluída</string>
+    <string name="see_all_format">Ver todos (%1$d)</string>
+    <string name="show_less">Mostrar menos</string>
 </resources>

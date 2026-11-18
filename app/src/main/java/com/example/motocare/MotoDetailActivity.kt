@@ -37,6 +37,9 @@ class MotoDetailActivity : AppCompatActivity() {
     private var usuarioId = 0L
     private var motoId = 0L
 
+    private var expandirAbastecimentos = false
+    private var expandirManutencoes = false
+
     private val localeBR = Locale.forLanguageTag("pt-BR")
     private val nfInteiro = NumberFormat.getIntegerInstance(localeBR)
     private val nfMoeda = NumberFormat.getCurrencyInstance(localeBR)
@@ -127,10 +130,9 @@ class MotoDetailActivity : AppCompatActivity() {
             nfMoeda.format(historico.sumOf { it.valorTotal }), historico.sumOf { it.litros })
         binding.tvHistoricoVazio.isVisible = historico.isEmpty()
         binding.containerAbastecimentos.removeAllViews()
-        
-        // Limita a exibição aos 5 abastecimentos mais recentes para manter a tela limpa e rápida
-        val recentes = historico.take(5)
-        recentes.forEach { item ->
+
+        val exibidos = if (expandirAbastecimentos) historico else historico.take(3)
+        exibidos.forEach { item ->
             val card = ItemAbastecimentoBinding.inflate(layoutInflater, binding.containerAbastecimentos, false)
             card.tvDataKm.text = getString(R.string.fuel_item_date,
                 item.data.split("-").reversed().joinToString("/"), nfInteiro.format(item.quilometragem))
@@ -138,6 +140,21 @@ class MotoDetailActivity : AppCompatActivity() {
             card.tvTotal.text = nfMoeda.format(item.valorTotal)
             card.root.setOnClickListener { abrirAbastecimento(item.id) }
             binding.containerAbastecimentos.addView(card.root)
+        }
+
+        if (historico.size > 3) {
+            binding.btnVerMaisAbastecimentos.isVisible = true
+            binding.btnVerMaisAbastecimentos.text = if (expandirAbastecimentos) {
+                getString(R.string.show_less)
+            } else {
+                getString(R.string.see_all_format, historico.size)
+            }
+            binding.btnVerMaisAbastecimentos.setOnClickListener {
+                expandirAbastecimentos = !expandirAbastecimentos
+                mostrarHistorico(historico)
+            }
+        } else {
+            binding.btnVerMaisAbastecimentos.isVisible = false
         }
     }
 
@@ -153,10 +170,9 @@ class MotoDetailActivity : AppCompatActivity() {
             servicosTexto, nfMoeda.format(historico.sumOf { it.custo }))
         binding.tvManutencoesVazio.isVisible = historico.isEmpty()
         binding.containerManutencoes.removeAllViews()
-        
-        // Limita a exibição às 5 manutenções mais recentes
-        val recentes = historico.take(5)
-        recentes.forEach { item ->
+
+        val exibidos = if (expandirManutencoes) historico else historico.take(3)
+        exibidos.forEach { item ->
             val card = ItemManutencaoBinding.inflate(layoutInflater, binding.containerManutencoes, false)
             card.tvServico.text = item.servico
             card.tvDataKm.text = getString(R.string.fuel_item_date,
@@ -169,6 +185,21 @@ class MotoDetailActivity : AppCompatActivity() {
                 else prazoPrevisto(item)
             card.root.setOnClickListener { abrirManutencao(item.id) }
             binding.containerManutencoes.addView(card.root)
+        }
+
+        if (historico.size > 3) {
+            binding.btnVerMaisManutencoes.isVisible = true
+            binding.btnVerMaisManutencoes.text = if (expandirManutencoes) {
+                getString(R.string.show_less)
+            } else {
+                getString(R.string.see_all_format, historico.size)
+            }
+            binding.btnVerMaisManutencoes.setOnClickListener {
+                expandirManutencoes = !expandirManutencoes
+                mostrarManutencoes(historico)
+            }
+        } else {
+            binding.btnVerMaisManutencoes.isVisible = false
         }
     }
 

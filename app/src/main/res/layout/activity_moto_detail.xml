@@ -289,6 +289,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerMaisAbastecimentos"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                tools:text="Ver todos (4)"
+                tools:visibility="visible" />
+
             <!-- Histórico de Manutenções -->
             <TextView
                 android:layout_width="match_parent"
@@ -317,6 +327,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerMaisManutencoes"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                tools:text="Ver todos (4)"
+                tools:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>
