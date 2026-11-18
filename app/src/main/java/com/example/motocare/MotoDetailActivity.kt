@@ -11,31 +11,35 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.motocare.database.MotoCareDatabase
-import com.example.motocare.databinding.ActivityMotoDetailBinding
-import com.example.motocare.databinding.ItemAbastecimentoBinding
-import com.example.motocare.model.Abastecimento
-import com.example.motocare.model.Manutencao
-import com.example.motocare.databinding.ItemManutencaoBinding
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import com.google.android.material.color.MaterialColors
-import java.util.Locale
 import com.example.motocare.database.MotoDao
 import com.example.motocare.database.MotoNaoEncontradaException
+import com.example.motocare.databinding.ActivityMotoDetailBinding
+import com.example.motocare.databinding.ItemAbastecimentoBinding
+import com.example.motocare.databinding.ItemManutencaoBinding
+import com.example.motocare.model.Abastecimento
+import com.example.motocare.model.Manutencao
 import com.example.motocare.session.SessionManager
 import com.example.motocare.ui.aplicarInsets
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class MotoDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMotoDetailBinding
     private lateinit var motoDao: MotoDao
     private var usuarioId = 0L
     private var motoId = 0L
+
+    private val localeBR = Locale.forLanguageTag("pt-BR")
+    private val nfInteiro = NumberFormat.getIntegerInstance(localeBR)
+    private val nfMoeda = NumberFormat.getCurrencyInstance(localeBR)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,16 +50,25 @@ class MotoDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         aplicarInsets(binding.root)
         motoDao = MotoCareDatabase.getInstance(this).motoDao()
+
         binding.toolbar.setNavigationOnClickListener { finish() }
-        binding.btnEditarMoto.setOnClickListener {
-            startActivity(Intent(this, MotoFormActivity::class.java)
-                .putExtra(MotoFormActivity.EXTRA_MOTO_ID, motoId))
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_edit -> {
+                    editarMoto()
+                    true
+                }
+                R.id.action_delete -> {
+                    confirmarExclusao()
+                    true
+                }
+                else -> false
+            }
         }
-        binding.btnExcluirMoto.setOnClickListener { confirmarExclusao() }
+
         binding.btnNovoAbastecimento.setOnClickListener { abrirAbastecimento() }
         binding.btnNovaManutencao.setOnClickListener { abrirManutencao() }
-        binding.btnEditarMoto.isEnabled = false
-        binding.btnExcluirMoto.isEnabled = false
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 combine(
@@ -75,24 +88,32 @@ class MotoDetailActivity : AppCompatActivity() {
                         binding.progress.isVisible = false
                         binding.tvMotoNome.text = getString(R.string.moto_name, moto.marca, moto.modelo)
                         binding.tvMotoAno.text = getString(R.string.moto_year, moto.ano)
-                        binding.tvMotoKm.text = getString(R.string.moto_km, moto.quilometragemAtual)
+                        binding.tvMotoKm.text = getString(R.string.moto_km, nfInteiro.format(moto.quilometragemAtual))
                         binding.tvMotoPlaca.text = moto.placa.ifBlank { getString(R.string.no_plate) }
+
                         binding.btnNovoAbastecimento.isEnabled = true
                         binding.btnNovaManutencao.isEnabled = true
+
                         mostrarHistorico(historico)
                         mostrarManutencoes(manutencoes)
                         mostrarPrevisoes(manutencoes, moto.quilometragemAtual)
-                        val moeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"))
+
                         val combustivel = historico.sumOf { it.valorTotal }
                         val servicos = manutencoes.sumOf { it.custo }
-                        binding.tvResumoGastos.text = getString(R.string.expenses_summary,
-                            moeda.format(combustivel), moeda.format(servicos), moeda.format(combustivel + servicos))
-                        binding.btnEditarMoto.isEnabled = true
-                        binding.btnExcluirMoto.isEnabled = true
+                        val total = combustivel + servicos
+
+                        binding.tvGastoCombustivel.text = nfMoeda.format(combustivel)
+                        binding.tvGastoManutencao.text = nfMoeda.format(servicos)
+                        binding.tvGastoTotal.text = nfMoeda.format(total)
                     }
                 }
             }
         }
+    }
+
+    private fun editarMoto() {
+        startActivity(Intent(this, MotoFormActivity::class.java)
+            .putExtra(MotoFormActivity.EXTRA_MOTO_ID, motoId))
     }
 
     private fun abrirAbastecimento(id: Long = 0L) {
@@ -102,17 +123,19 @@ class MotoDetailActivity : AppCompatActivity() {
     }
 
     private fun mostrarHistorico(historico: List<Abastecimento>) {
-        val moeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"))
         binding.tvResumoCombustivel.text = getString(R.string.fuel_summary,
-            moeda.format(historico.sumOf { it.valorTotal }), historico.sumOf { it.litros })
+            nfMoeda.format(historico.sumOf { it.valorTotal }), historico.sumOf { it.litros })
         binding.tvHistoricoVazio.isVisible = historico.isEmpty()
         binding.containerAbastecimentos.removeAllViews()
-        historico.forEach { item ->
+        
+        // Limita a exibição aos 5 abastecimentos mais recentes para manter a tela limpa e rápida
+        val recentes = historico.take(5)
+        recentes.forEach { item ->
             val card = ItemAbastecimentoBinding.inflate(layoutInflater, binding.containerAbastecimentos, false)
             card.tvDataKm.text = getString(R.string.fuel_item_date,
-                item.data.split("-").reversed().joinToString("/"), item.quilometragem)
+                item.data.split("-").reversed().joinToString("/"), nfInteiro.format(item.quilometragem))
             card.tvVolumePreco.text = getString(R.string.fuel_item_volume, item.litros, item.valorPorLitro)
-            card.tvTotal.text = moeda.format(item.valorTotal)
+            card.tvTotal.text = nfMoeda.format(item.valorTotal)
             card.root.setOnClickListener { abrirAbastecimento(item.id) }
             binding.containerAbastecimentos.addView(card.root)
         }
@@ -125,19 +148,22 @@ class MotoDetailActivity : AppCompatActivity() {
     }
 
     private fun mostrarManutencoes(historico: List<Manutencao>) {
-        val moeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"))
-        binding.tvResumoManutencoes.text = getString(R.string.maintenance_summary,
-            historico.size, moeda.format(historico.sumOf { it.custo }))
+        val servicosTexto = resources.getQuantityString(R.plurals.maintenance_summary_services, historico.size, historico.size)
+        binding.tvResumoManutencoes.text = getString(R.string.maintenance_summary_text,
+            servicosTexto, nfMoeda.format(historico.sumOf { it.custo }))
         binding.tvManutencoesVazio.isVisible = historico.isEmpty()
         binding.containerManutencoes.removeAllViews()
-        historico.forEach { item ->
+        
+        // Limita a exibição às 5 manutenções mais recentes
+        val recentes = historico.take(5)
+        recentes.forEach { item ->
             val card = ItemManutencaoBinding.inflate(layoutInflater, binding.containerManutencoes, false)
             card.tvServico.text = item.servico
             card.tvDataKm.text = getString(R.string.fuel_item_date,
-                item.data.split("-").reversed().joinToString("/"), item.quilometragem)
+                item.data.split("-").reversed().joinToString("/"), nfInteiro.format(item.quilometragem))
             card.tvObservacao.text = item.observacao
             card.tvObservacao.isVisible = item.observacao.isNotBlank()
-            card.tvCusto.text = moeda.format(item.custo)
+            card.tvCusto.text = nfMoeda.format(item.custo)
             card.tvPrevisao.isVisible = item.proximaData != null || item.proximaQuilometragem != null
             card.tvPrevisao.text = if (item.previsaoConcluida) getString(R.string.schedule_finished)
                 else prazoPrevisto(item)
@@ -148,7 +174,7 @@ class MotoDetailActivity : AppCompatActivity() {
 
     private fun prazoPrevisto(item: Manutencao): String = listOfNotNull(
         item.proximaData?.let { getString(R.string.schedule_date, it.split("-").reversed().joinToString("/")) },
-        item.proximaQuilometragem?.let { getString(R.string.schedule_km, it) }
+        item.proximaQuilometragem?.let { getString(R.string.schedule_km, nfInteiro.format(it)) }
     ).joinToString(" • ")
 
     private fun situacaoPrevisao(item: Manutencao, kmAtual: Int, hoje: String, limite: String): Int {
@@ -207,8 +233,6 @@ class MotoDetailActivity : AppCompatActivity() {
     }
 
     private fun excluir() {
-        binding.btnExcluirMoto.isEnabled = false
-        binding.btnEditarMoto.isEnabled = false
         lifecycleScope.launch {
             try {
                 if (motoDao.excluir(motoId, usuarioId) != 1) throw MotoNaoEncontradaException()
@@ -219,8 +243,6 @@ class MotoDetailActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("MotoCare", "Falha ao excluir moto", e)
                 Toast.makeText(this@MotoDetailActivity, R.string.database_error, Toast.LENGTH_LONG).show()
-                binding.btnExcluirMoto.isEnabled = true
-                binding.btnEditarMoto.isEnabled = true
             }
         }
     }

@@ -21,7 +21,7 @@
                 android:layout_marginTop="16dp" android:hint="@string/maintenance_service">
                 <com.google.android.material.textfield.TextInputEditText android:id="@+id/etServico"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textAutoCorrect" android:importantForAutofill="no"
                     android:maxLength="120" android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilData"
@@ -57,7 +57,7 @@
                 android:layout_marginTop="16dp" android:hint="@string/maintenance_notes">
                 <com.google.android.material.textfield.TextInputEditText android:id="@+id/etObservacao"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine" android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine|textAutoCorrect" android:importantForAutofill="no"
                     android:maxLength="500" android:minLines="2" android:maxLines="4" />
             </com.google.android.material.textfield.TextInputLayout>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"

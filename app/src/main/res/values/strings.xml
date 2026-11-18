@@ -43,7 +43,7 @@
     <string name="delete_moto_message">Deseja excluir esta moto e todos os seus abastecimentos e manutenções? Esta ação não pode ser desfeita.</string>
     <string name="moto_name">%1$s %2$s</string>
     <string name="moto_year">Ano: %1$d</string>
-    <string name="moto_km">%1$,d km</string>
+    <string name="moto_km">%1$s km</string>
     <string name="no_plate">Placa não informada</string>
     <string name="required_field">Preencha este campo.</string>
     <string name="invalid_moto_year">Informe um ano entre 1900 e o próximo ano.</string>
@@ -62,7 +62,7 @@
     <string name="km_hint">Quilometragem no abastecimento (km)</string>
     <string name="fuel_liters">Litros abastecidos</string>
     <string name="fuel_price">Valor por litro (R$)</string>
-    <string name="fuel_total">Total calculado (R$)</string>
+    <string name="fuel_total">Total calculated (R$)</string>
     <string name="positive_number">Informe um valor maior que zero.</string>
     <string name="fuel_saved">Abastecimento salvo!</string>
     <string name="fuel_deleted">Abastecimento excluído.</string>
@@ -71,7 +71,7 @@
     <string name="fuel_history">Histórico de abastecimentos</string>
     <string name="fuel_empty">Nenhum abastecimento registrado.</string>
     <string name="fuel_summary">Total gasto: %1$s • %2$.2f L\nToque em um registro para editar ou excluir.</string>
-    <string name="fuel_item_date">%1$s • %2$,d km</string>
+    <string name="fuel_item_date">%1$s • %2$s km</string>
     <string name="fuel_item_volume">%1$.3f L • R$ %2$.3f por litro</string>
     <string name="new_maintenance">Registrar manutenção</string>
     <string name="edit_maintenance">Editar manutenção</string>
@@ -88,8 +88,17 @@
     <string name="delete_maintenance_message">Deseja excluir esta manutenção?</string>
     <string name="maintenance_history">Histórico de manutenções</string>
     <string name="maintenance_empty">Nenhuma manutenção registrada.</string>
-    <string name="maintenance_summary">%1$d serviços • %2$s\nToque em um registro para editar ou excluir.</string>
+
+    <plurals name="maintenance_summary_services">
+        <item quantity="one">%1$d serviço</item>
+        <item quantity="other">%1$d serviços</item>
+    </plurals>
+    <string name="maintenance_summary_text">%1$s • %2$s\nToque em um registro para editar ou excluir.</string>
+
     <string name="expenses_title">Gastos acumulados</string>
+    <string name="expenses_fuel">Combustível</string>
+    <string name="expenses_maintenance">Manutenção</string>
+    <string name="expenses_total">Total acumulado</string>
     <string name="expenses_summary">Combustível: %1$s\nManutenção: %2$s\nTotal: %3$s</string>
     <string name="schedule_form_title">Previsão do próximo serviço</string>
     <string name="schedule_form_hint">Informe data, quilometragem ou ambas. Quando realizar o próximo serviço, registre uma nova manutenção e encerre esta previsão.</string>
@@ -103,7 +112,7 @@
     <string name="schedule_hint">Próximo do vencimento: até 7 dias ou 500 km. Toque em uma previsão para editar ou marcar como concluída.</string>
     <string name="schedule_empty">Nenhuma previsão pendente.</string>
     <string name="schedule_date">Data: %1$s</string>
-    <string name="schedule_km">Odômetro: %1$,d km</string>
+    <string name="schedule_km">Odômetro: %1$s km</string>
     <string name="schedule_overdue">Atrasada</string>
     <string name="schedule_near">Próxima do vencimento</string>
     <string name="schedule_on_time">Em dia</string>
